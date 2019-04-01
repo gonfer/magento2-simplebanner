@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+    <menu>
+        <add id="Gonza_Banner::gonza" title="Gonza Main" module="Gonza_Banner" sortOrder="100" resource="Gonza_Banner::banner"/>
+        <add id="Gonza_Banner::banner" title="Gonza banner" module="Gonza_Banner" sortOrder="1" parent="Gonza_Banner::gonza" action="banner/banner" resource="Gonza_Banner::banner"/>
+    </menu>
+</config>

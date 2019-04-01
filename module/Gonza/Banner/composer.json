@@ -1,0 +1,17 @@
+{
+    "name": "gonza/banner",
+    "description": "Banner Slider for Magento",
+    "type": "magento2-module",
+    "version": "0.1",
+    "license": [
+        "MIT"
+    ],
+    "extra": {
+        "map": [
+            [
+                "*",
+                "Gonza/Banner"
+            ]
+        ]
+    }
+}

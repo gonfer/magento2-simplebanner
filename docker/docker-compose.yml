@@ -1,0 +1,139 @@
+##
+# Services needed to run Magento2 application on Docker
+#
+# Docker Compose defines required services and attach them together through aliases
+##
+version: '2'
+services:
+    web:
+        restart: always
+        image: alankent/magento2devbox-web:latest
+
+        depends_on:
+          - db
+          #- rabbitmq
+          #- elastic
+          #- rabbitmq
+
+        volumes:
+
+          # Uncomment the first line for use with Unison and the "unison"
+          # service below (Mac, Windows). Uncomment the second line instead
+          # to mount the volume directly (Linux). Comment out both lines if
+          # file sharing is not required.
+          - ../magento2/:/var/www/magento2
+          #- "./shared/www:/var/www"
+
+          # Uncomment to share your ~/.ssh directory with the container.
+          # This can be useful for GitHub ssh keys and similar.
+          #- "~/.ssh:/home/magento2/.ssh"
+
+          # Uncomment this line if you want to share your composer
+          # download cache between projects (more efficient, but
+          # means the auth.json file will also be shared).
+          #- "~/.composer:/home/magento2/.composer"
+
+          # Uncomment to mount local directory for apache log files.
+          #- "./shared/logs/apache2:/var/log/apache2"
+
+          # Uncomment to mount local directory for FPM log files.
+          #- "./shared/logs/php-fpm:/var/log/php-fpm"
+
+          # Uncomment to share Magento cloud CLI settings between projects.
+          #- "./shared/.magento-cloud:/home/magento2/.magento-cloud"
+
+        environment:
+          # Optional. If set, container will create a default auth.json
+          # file for Composer to use (if one does not already exist).
+          # (Download keys are a long hex sequence available from
+          # http://marketplace.magento.com/, "My Profile", "My Access Keys")
+          # Generally it is not recommended to commit keys to a git repo
+          # for security reasons - it grants all viewers permission to download
+          # all your Marketplace purchases.
+          - MAGENTO_PUBLIC_KEY=
+          - MAGENTO_PRIVATE_KEY=
+
+        # The following exposes ports inside the container publicly.
+        # Docker maps the public port numbers to ports inside the container
+        # using Linux iptables support. If a single number is specified,
+        # Docker will pick an unused port number at random every time the
+        # container restarts. Use 8080:80 to bind the public port number
+        # of 8080 to the internal port number of 80. (The internal port
+        # number never changes - you may pick any external port number
+        # to avoid collisions between different containers or projects.)
+        ports:
+
+          # Pick a random unused web server port.
+          # (Use "8080:80" for force external port to be 8080.)
+          - "80"
+
+          # Use port 2222 for SSH (make sure unique across projects).
+          # (If using the PHP Storm IDE, It is strongly recommended to pick a
+          # dedicated port using the "2222:22" syntax so the port number does
+          # not change each time the container is restarted, requiring PHP
+          # Storm reconfiguration.)
+          - "2222:22"
+
+          # Expose the BrowserSync ports.
+          # (Only needed if using BrowserSync for frontend development.)
+          - "3000"
+          - "3001"
+
+    # This container contains the Unison process.
+    # Comment out / remove this service if not using Unison (e.g. on Linux).
+    
+
+    db:
+        restart: always
+        image: mysql:5.6
+
+        ports:
+          - "3306"
+
+        environment:
+          - MYSQL_ROOT_PASSWORD=root
+          - MYSQL_DATABASE=magento2
+
+        # Uncomment the following line if you uncomment a volume mount
+        #volumes:
+
+          # Uncomment to mount log files locally.
+          #- "./shared/logs/mysql:/var/log/mysql"
+
+          # Uncomment if you want the database to last after removing the
+          # container. (Not recommended.)
+          #- "./shared/db:/var/lib/mysql"
+
+    # Uncomment the following to enable Varnish support.
+    # (Make sure the service name indentation remains exactly aligned with
+    # the previous service names)
+    #varnish:
+    #    restart: always
+    #    depends_on:
+    #      - "web"
+    #    image: magento/magento2devbox-varnish:latest
+    #    ports:
+    #      - 6081
+
+    # Uncomment the following lines to enable Redis support.
+    # (Make sure the service name indentation remains exactly aligned with
+    # the previous service names)
+    #redis:
+    #    restart: always
+    #    image: redis:3.0.7
+
+    # Uncomment the following to enable ElasticSearch support.
+    # (Make sure the service name indentation remains exactly aligned with
+    # the previous service names)
+    #elastic:
+    #    restart: always
+    #    image: elasticsearch:2
+    #    ports:
+    #      - 9200
+
+    # Uncomment the following to enable RabbitMQ support.
+    # (Make sure the service name indentation remains exactly aligned with
+    # the previous service names)
+    #rabbitmq:
+    #    restart: always
+    #    image: rabbitmq:latest
