@@ -1,3 +1,4 @@
 !.gitignore
 
 magento2/
+*.code-workspace
