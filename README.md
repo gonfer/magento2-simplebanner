@@ -1,5 +1,6 @@
 # magento2-simplebanner
-Simple Banner Module for Magento 2
+Simple Banner Module for Magento 2. This module adds a banner in the front end. The user can make groups of images and configure a banner for each group.
+The banner can be added through a widget.
 
 # Creating Project with Composer
 
